@@ -25,19 +25,25 @@ SECRET_KEY = 'a(%*z*ykl1luuas9fhwgj_92+@w1cfr8r8d-plqna-h)crk-(q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+CORS_ORIGIN_WHITELIST = (
+    'localhost:4200',
+    '127.0.0.1:4200'
+)
 
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS = {
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
+    'rest_framework',
+    'grapher.apps.CompaniesConfig',
+    'corsheaders'
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
