@@ -9,7 +9,8 @@ type EntityArrayResponseType = HttpResponse<CustomPattern[]>;
 @Injectable({providedIn: 'root'})
 export class JasonParserService {
     resourceUrl = 'http://127.0.0.1:8000/api/v1/jasonParser/';
-    httpHeader = new HttpHeaders({'content-type': 'application/json'});
+    // httpHeader = new HttpHeaders({'content-type': 'application/json', "Access-Control-Allow-Methods":"GET, POST"});
+    httpHeader = new HttpHeaders({'content-type': 'application/json', 'Access-Control-Allow-Origin': '*' ,"Access-Control-Allow-Methods":"GET, POST"});
 
     private messageSource = new BehaviorSubject(new Map<string, string>());
     public jasonDataBetweenDynamicComponentAndParrent = this.messageSource.asObservable();

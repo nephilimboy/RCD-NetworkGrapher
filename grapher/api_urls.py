@@ -10,6 +10,11 @@ urlpatterns = [
 ]
 
 urlpatterns += format_suffix_patterns([
+
+    url(r'^logParser/$',
+        LogParserView.as_view(),
+        name='logParser_list'),
+
     url(r'^customPattern/$',
         CustomPatternView.as_view(),
         name='custom_pattern_list'),

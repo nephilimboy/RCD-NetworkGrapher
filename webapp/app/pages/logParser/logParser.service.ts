@@ -10,8 +10,9 @@ type EntityArrayResponseType = HttpResponse<LogParser[]>;
 
 @Injectable({ providedIn: 'root' })
 export class LogParserService {
-    resourceUrl = 'http://127.0.0.1:8000/api/v1/univstud/';
-    httpHeader = new HttpHeaders({'content-type': 'application/json'})
+    resourceUrl = 'http://127.0.0.1:8000/api/v1/logParser/';
+    httpHeader = new HttpHeaders({'content-type': 'application/json'});
+    // httpHeader = new HttpHeaders({'content-type': 'application/json', 'Access-Control-Allow-Origin': '*' ,"Access-Control-Allow-Methods":"GET,OPTIONS, POST"});
     // private handleError: HandleError;
     constructor(private http: HttpClient) {
         // this.handleError = httpErrorHandler.createHandleError('HeroesService');
