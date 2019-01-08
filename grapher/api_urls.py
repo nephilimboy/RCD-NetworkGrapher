@@ -22,5 +22,9 @@ urlpatterns += format_suffix_patterns([
     url(r'^customPattern/(?P<pk>\d+)/$',
         CustomPatternView.as_view(),
         name='custom_pattern_list'),
+
+    url(r'^jasonParser/$',
+        CustomPatternView.as_view(),
+        name='jason_parser_list'),
 ])
 

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import LogParser, CustomPattern
+from .models import LogParser, CustomPattern, JasonParserAlias, JasonParser
 
 
 class LogParserSerializer(serializers.ModelSerializer):
@@ -22,7 +22,6 @@ class CustomPatternSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomPattern
         fields = '__all__'
-        # fields = ('id', 'name', 'pattern')
 
     def create(self, validated_data):
         instance = CustomPattern.objects.create(**validated_data)
@@ -33,3 +32,17 @@ class CustomPatternSerializer(serializers.ModelSerializer):
         instance.pattern = validated_data.get('pattern', instance.pattern)
         instance.save()
         return instance
+
+
+class JasonParserAliasSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JasonParserAlias
+        fields = '__all__'
+
+
+class JasonParserSerializer(serializers.ModelSerializer):
+    jason_alias = JasonParserAliasSerializer(many=True)
+
+    class Meta:
+        model = JasonParser
+        fields = ("id", "name", "jason", "jason_alias")
