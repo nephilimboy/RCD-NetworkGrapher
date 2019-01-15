@@ -10,8 +10,6 @@ type EntityArrayResponseType = HttpResponse<CustomPattern[]>;
 export class CustomPatternService {
     resourceUrl = 'http://127.0.0.1:8000/api/v1/customPattern/';
     httpHeader = new HttpHeaders({'content-type': 'application/json'});
-    // httpHeader = new HttpHeaders({'content-type': 'application/json', 'Access-Control-Allow-Origin': '*' ,"Access-Control-Allow-Methods":"GET,OPTIONS, POST"});
-    // private handleError: HandleError;
     constructor(private http: HttpClient) {
         // this.handleError = httpErrorHandler.createHandleError('HeroesService');
     }

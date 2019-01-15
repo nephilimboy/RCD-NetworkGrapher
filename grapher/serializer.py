@@ -38,6 +38,7 @@ class JasonParserAliasSerializer(serializers.ModelSerializer):
     class Meta:
         model = JasonParserAlias
         fields = ("id", "name", "path")
+        # allow_null is for to save object inside update method in JasonParserSerializer
         extra_kwargs = {'id': {'read_only': False, 'allow_null': True}}
 
 

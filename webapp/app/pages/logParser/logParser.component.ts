@@ -1,4 +1,4 @@
-import {AfterContentInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterContentInit, Component, OnInit} from '@angular/core';
 import {LocalDataSource} from "ng2-smart-table";
 import {NbDialogService} from '@nebular/theme';
 import {LogParserEditComponent} from "./logParser-edit.component";
@@ -9,6 +9,8 @@ import {CustomPatternService} from "./customPattern.service";
 import {CustomPattern} from "./customPattern.model";
 import {CustomPatternEditComponent} from "./customPattern-edit.component";
 import {JasonParserEditComponent} from "./jasonParser-edit.component";
+import {JasonParser, JasonParserVM} from "./jasonParser.model";
+import {JasonParserService} from "./jasonParser.service";
 
 @Component({
     selector: 'app-logParser',
@@ -75,15 +77,46 @@ export class LogParserComponent implements OnInit, AfterContentInit {
         },
     };
 
+    jasonParser_table_settings = {
+        hideSubHeader: true,
+        mode: 'external',
+        add: {
+            addButtonContent: '<i class="nb-plus"></i>',
+            createButtonContent: '<i class="nb-checkmark"></i>',
+            cancelButtonContent: '<i class="nb-close"></i>',
+        },
+        edit: {
+            editButtonContent: '<i class="nb-edit"></i>',
+            saveButtonContent: '<i class="nb-checkmark"></i>',
+            cancelButtonContent: '<i class="nb-close"></i>',
+        },
+        delete: {
+            deleteButtonContent: '<i class="nb-trash"></i>',
+            confirmDelete: true,
+        },
+        columns: {
+            name: {
+                title: 'Name',
+                type: 'string',
+            },
+            jason_alias: {
+                title: 'Alias',
+                type: 'html',
+            },
+        },
+    };
+
     sourceLogParser: LocalDataSource = new LocalDataSource();
     logParsers: LogParser[];
     sourceCustomPattern: LocalDataSource = new LocalDataSource();
     customPattern: CustomPattern[];
+    sourceJasonParser: LocalDataSource = new LocalDataSource();
+    jasonParser: JasonParser[];
 
     constructor(private dialogService: NbDialogService,
                 private lopParserService: LogParserService,
+                private jasonParserService: JasonParserService,
                 private customPatternService: CustomPatternService) {
-        // const data = this.service.getData();
     }
 
     onDeleteConfirmLogParser(event): void {
@@ -100,10 +133,8 @@ export class LogParserComponent implements OnInit, AfterContentInit {
 
     ngOnInit() {
         this.loadAllLogParser();
-
         this.loadAllCustomPattern();
-
-        // this.createJson('');
+        this.loadAllJasonParser();
     }
 
     ngAfterContentInit(): void {
@@ -124,6 +155,30 @@ export class LogParserComponent implements OnInit, AfterContentInit {
             (res: HttpResponse<CustomPattern[]>) => {
                 this.customPattern = res.body;
                 this.sourceCustomPattern.load(this.customPattern);
+            },
+            (res: HttpErrorResponse) => console.log('error')
+        );
+    }
+
+    loadAllJasonParser() {
+        this.jasonParserService.query().subscribe(
+            (res: HttpResponse<JasonParser[]>) => {
+                this.jasonParser = res.body;
+                // this.sourceJasonParser.load(this.jasonParser);
+                let jasonParserVM: JasonParserVM[] = [];
+                this.jasonParser.forEach(jparser => {
+                    let jParserVM = new JasonParserVM();
+                    jParserVM.id = jparser.id;
+                    jParserVM.name = jparser.name;
+                    jParserVM.jason = jparser.jason;
+                    jparser.jason_alias.forEach(alias => {
+                        jParserVM.jason_alias +=  alias.name + ' ' +`<span class="jsonAlias bold" style="font-weight: 900 !important;"> <-> </span>`  + " " + alias.path + "<br/>"
+
+                    });
+                    jasonParserVM.push(jParserVM);
+                });
+                console.log(jasonParserVM);
+                this.sourceJasonParser.load(jasonParserVM);
             },
             (res: HttpErrorResponse) => console.log('error')
         );
@@ -153,15 +208,17 @@ export class LogParserComponent implements OnInit, AfterContentInit {
             .onClose.subscribe((res) => this.loadAllCustomPattern());
     }
 
-    createNewJasonParser(){
+    createNewJasonParser() {
         this.dialogService
             .open(JasonParserEditComponent, {
                 closeOnBackdropClick: false,
-                context: {
-
-                },
+                context: {},
             })
             .onClose.subscribe();
+    }
+
+    onEditDataLogParser(evt) {
+        console.log(evt)
     }
 
     onEditCustomPattern(evt) {
@@ -176,6 +233,18 @@ export class LogParserComponent implements OnInit, AfterContentInit {
             .onClose.subscribe((res) => this.loadAllCustomPattern());
     }
 
+    onEditJasonParser(evt) {
+        this.dialogService
+            .open(JasonParserEditComponent, {
+                closeOnBackdropClick: false,
+                context: {
+                    jasonParser: evt.data,
+                    isEditData: true
+                },
+            })
+            .onClose.subscribe((res) => this.loadAllCustomPattern());
+    }
+
     onDeleteCustomPattern(evt) {
         console.log(evt);
         this.customPatternService.delete(parseInt(evt.data.id)).subscribe((response) => {
@@ -183,9 +252,6 @@ export class LogParserComponent implements OnInit, AfterContentInit {
         }, (res) => console.log('res'));
     }
 
-    onEditDataLogParser(evt) {
-        console.log(evt)
-    }
 
     onEditDataCustomPattern(evt) {
         console.log(evt)

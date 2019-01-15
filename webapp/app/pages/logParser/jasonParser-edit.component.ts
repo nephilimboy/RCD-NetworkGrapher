@@ -26,7 +26,7 @@ import {JasonParserService} from "./jasonParser.service";
 export class JasonParserEditComponent implements OnInit, AfterContentInit {
     @ViewChild('container', {read: ViewContainerRef}) container: ViewContainerRef;
 
-    @Input() customPattern: CustomPattern;
+    @Input() jasonParser: JasonParser;
     @Input() isEditData: boolean = false;
 
     jasonInput: any = '';
