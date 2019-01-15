@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import LogParser, CustomPattern
-from .serializer import LogParserSerializer, CustomPatternSerializer
+from .models import LogParser, CustomPattern, JasonParser
+from .serializer import LogParserSerializer, CustomPatternSerializer, JasonParserSerializer
 
 
 class LogParserView(APIView):
@@ -59,12 +59,12 @@ class CustomPatternView(APIView):
 class JasonParserView(APIView):
 
     def get(self, format=None):
-        customPattern = CustomPattern.objects.all()
-        serializer = CustomPatternSerializer(customPattern, many=True)
+        jasonParser = JasonParser.objects.all()
+        serializer = JasonParserSerializer(jasonParser, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = CustomPatternSerializer(data=request.data)
+        serializer = JasonParserSerializer(data=request.data)
         if serializer.is_valid(raise_exception=ValueError):
             serializer.create(validated_data=request.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -72,13 +72,9 @@ class JasonParserView(APIView):
                         status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk):
-        serializer = CustomPatternSerializer(get_object_or_404(CustomPattern, pk=pk), data=request.data)
+        serializer = JasonParserSerializer(get_object_or_404(JasonParser, pk=pk), data=request.data)
         if serializer.is_valid(raise_exception=ValueError):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.error_messages,
                         status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        (get_object_or_404(CustomPattern, pk=pk)).delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)

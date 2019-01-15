@@ -28,7 +28,7 @@ class JasonParser(models.Model):
 class JasonParserAlias(models.Model):
     name = models.CharField(max_length=50)
     path = models.CharField(max_length=200)
-    jasonParser = models.ForeignKey(JasonParser, on_delete=models.CASCADE)
+    jasonParser = models.ForeignKey(JasonParser, on_delete=models.CASCADE, related_name="jason_alias")
 
     def __str__(self):
         return self.name + ' ' + self.path

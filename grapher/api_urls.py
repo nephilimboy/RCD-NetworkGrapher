@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from .views import LogParserView, CustomPatternView
+from .views import LogParserView, CustomPatternView, JasonParserView
 
 app_name = 'companies'
 
@@ -24,7 +24,11 @@ urlpatterns += format_suffix_patterns([
         name='custom_pattern_list'),
 
     url(r'^jasonParser/$',
-        CustomPatternView.as_view(),
+        JasonParserView.as_view(),
         name='jason_parser_list'),
+
+    url(r'^jasonParser/(?P<pk>\d+)/$',
+        JasonParserView.as_view(),
+        name='jason_parser_list_update'),
 ])
 
