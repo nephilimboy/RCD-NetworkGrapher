@@ -78,3 +78,7 @@ class JasonParserView(APIView):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.error_messages,
                         status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        (get_object_or_404(JasonParser, pk=pk)).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

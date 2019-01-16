@@ -172,7 +172,7 @@ export class LogParserComponent implements OnInit, AfterContentInit {
                     jParserVM.name = jparser.name;
                     jParserVM.jason = jparser.jason;
                     jparser.jason_alias.forEach(alias => {
-                        jParserVM.jason_alias +=  alias.name + ' ' +`<span class="jsonAlias bold" style="font-weight: 900 !important;"> <-> </span>`  + " " + alias.path + "<br/>"
+                        jParserVM.jason_alias += alias.name + '&nbsp;' + `<span class="jsonAlias bold" style="font-weight: 900 !important;"> <-> </span>` + "&nbsp;" + alias.path + "<br/>"
 
                     });
                     jasonParserVM.push(jParserVM);
@@ -212,9 +212,12 @@ export class LogParserComponent implements OnInit, AfterContentInit {
         this.dialogService
             .open(JasonParserEditComponent, {
                 closeOnBackdropClick: false,
-                context: {},
+                context: {
+                    jasonParser: new JasonParser(),
+                    isEditData: false
+                },
             })
-            .onClose.subscribe();
+            .onClose.subscribe((res) => this.loadAllJasonParser());
     }
 
     onEditDataLogParser(evt) {
@@ -234,28 +237,38 @@ export class LogParserComponent implements OnInit, AfterContentInit {
     }
 
     onEditJasonParser(evt) {
-        this.dialogService
-            .open(JasonParserEditComponent, {
+        let temp :JasonParser = new JasonParser();
+        this.jasonParser.forEach(parser =>{
+            if (evt.data.id === parser.id) {
+                temp.id = parser.id;
+                temp.name = parser.name;
+                temp.jason = parser.jason;
+                parser.jason_alias.forEach(alias=>{
+                    temp.jason_alias.push(alias);
+                });
+            }
+        })
+        this.dialogService.open(JasonParserEditComponent, {
                 closeOnBackdropClick: false,
                 context: {
-                    jasonParser: evt.data,
+                    jasonParser: temp,
                     isEditData: true
                 },
             })
-            .onClose.subscribe((res) => this.loadAllCustomPattern());
+            .onClose.subscribe((res) => this.loadAllJasonParser());
+
     }
 
     onDeleteCustomPattern(evt) {
-        console.log(evt);
         this.customPatternService.delete(parseInt(evt.data.id)).subscribe((response) => {
             this.loadAllCustomPattern();
         }, (res) => console.log('res'));
     }
 
-
-    onEditDataCustomPattern(evt) {
-        console.log(evt)
+    onDeleteJasonParser(evt) {
+        this.jasonParserService.delete(parseInt(evt.data.id)).subscribe((response) => {
+            this.loadAllJasonParser();
+        }, (res) => console.log('res'));
     }
-
 
 }

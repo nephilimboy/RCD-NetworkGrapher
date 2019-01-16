@@ -8,7 +8,7 @@
                 <div class="row">
                     <label for="inputName" class="col-1 col-form-label">Name</label>
                     <div class="col-5">
-                        <input type="text" class="form-control" id="logParserName"
+                        <input type="text" name="name" [(ngModel)]="jasonParser.name" class="form-control" id="logParserName"
                                placeholder="Parser Name">
                     </div>
 
@@ -17,7 +17,7 @@
                 <hr/>
                 <div class="row">
                     <div class="col-5">
-                            <textarea nbInput fullWidth shape="round" name="jasonInput" [(ngModel)]="jasonInput"
+                            <textarea nbInput fullWidth shape="round" name="jasonInput" [(ngModel)]="jasonParser.jason"
                                       placeholder="Json Input" style="height: 600px;"></textarea>
                     </div>
                     <div class="col-1">
@@ -32,20 +32,6 @@
                             <div #container></div>
                         </div>
                     </div>
-                </div>
-
-                <br/>
-                <hr/>
-                <br/>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="form-group">
-                            <label for="logParserOutput"> Map Parameters</label>
-                            <textarea rows="5" nbInput fullWidth shape="round" readonly
-                                      placeholder="Text Area"></textarea>
-                        </div>
-                    </div>
-
                 </div>
 
             </nb-card-body>

@@ -61,6 +61,16 @@ class JasonParserSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get('name', instance.name)
         instance.jason = validated_data.get('jason', instance.jason)
 
+        # delete alias which is not presented in the input jason
+        for current_alias in instance.jason_alias.all():
+            isInstanceAvailable = False
+            for jason_alias_valid_data in validated_data['jason_alias']:
+                if current_alias.id == jason_alias_valid_data.get('id', None):
+                    isInstanceAvailable = True
+                    break
+            if not isInstanceAvailable:
+                current_alias.delete()
+
         for jason_alias_valid_data in validated_data['jason_alias']:
             jason_alias_valid_data_id = jason_alias_valid_data.get('id', None)
             if jason_alias_valid_data_id:

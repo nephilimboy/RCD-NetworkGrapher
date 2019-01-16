@@ -1,4 +1,4 @@
-export class JasonParser {
+export class JasonParserUtil {
 
     public allKeyArr : Map<number,string>;
     public key: any;
