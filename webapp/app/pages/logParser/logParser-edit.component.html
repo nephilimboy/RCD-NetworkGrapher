@@ -36,7 +36,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-9" *ngIf="itemrow.value.itemParserType == 'static'">
+                                <div class="col-7" *ngIf="itemrow.value.itemParserType == 'static'">
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">Static Text</label>
                                         <input type="text" class="form-control" id="exampleInputPassword1"
@@ -46,7 +46,7 @@
                                 </div>
 
 
-                                <div class="col-3" *ngIf="itemrow.value.itemParserType != 'static'">
+                                <div class="col-2" *ngIf="itemrow.value.itemParserType != 'static'">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Name</label>
                                         <input type="text" class="form-control" formControlName="itemName"
@@ -54,7 +54,7 @@
                                                placeholder="Name">
                                     </div>
                                 </div>
-                                <div class="col-3" *ngIf="itemrow.value.itemParserType != 'static'">
+                                <div class="col-2" *ngIf="itemrow.value.itemParserType != 'static'" style="font-size: 11px;">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Pattern Type</label>
                                         <select #selectTypeOfPattern
@@ -87,8 +87,24 @@
                                 </div>
                                 <div class="col-1">
                                     <div class="form-group">
-                                        <label for="exampleInputPassword1">Remove</label>
-                                        <a class="btn btn-danger btn-demo " (click)="deleteRow(i)" ><i
+                                        <label for="exampleInputPassword1">&nbsp;</label>
+                                        <a class="btn btn-hero-info btn-demo " (click)="deleteRow(i)" ><i
+                                                class="fas fa-arrow-up"
+                                                style="color: #f1eefc;"></i></a>
+                                    </div>
+                                </div>
+                                <div class="col-1">
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">&nbsp;</label>
+                                        <a class="btn btn-hero-info btn-demo " (click)="deleteRow(i)" ><i
+                                                class="fas fa-arrow-down"
+                                                style="color: #f1eefc;"></i></a>
+                                    </div>
+                                </div>
+                                <div class="col-1">
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">&nbsp;</label>
+                                        <a class="btn btn-hero-danger btn-demo " (click)="deleteRow(i)" ><i
                                                 class="ion-close-round"
                                                 style="color: #f1eefc;"></i></a>
                                     </div>

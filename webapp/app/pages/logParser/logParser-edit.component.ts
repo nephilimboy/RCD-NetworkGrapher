@@ -44,6 +44,8 @@ export class LogParserEditComponent implements OnInit, AfterContentInit {
     addNewRow() {
         const control = <FormArray>this.logParserRows.controls['itemRows'];
         control.push(this.initItemRows());
+        console.log("======= controlllleeee ========")
+        console.log(control);
         this.finalOutputHandler();
     }
 
@@ -70,6 +72,14 @@ export class LogParserEditComponent implements OnInit, AfterContentInit {
 
                 // %{WORD:name} is %{WORD:gender}, %{NUMBER:age} years old and weighs %{NUMBER:weight} kilograms
         })
+    }
+
+    moveUp(index: number){
+
+    }
+
+    moveDown(index: number){
+
     }
 
     dismiss() {
