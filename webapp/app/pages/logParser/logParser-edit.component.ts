@@ -44,8 +44,6 @@ export class LogParserEditComponent implements OnInit, AfterContentInit {
     addNewRow() {
         const control = <FormArray>this.logParserRows.controls['itemRows'];
         control.push(this.initItemRows());
-        console.log("======= controlllleeee ========")
-        console.log(control);
         this.finalOutputHandler();
     }
 
@@ -58,36 +56,56 @@ export class LogParserEditComponent implements OnInit, AfterContentInit {
     finalOutputHandler() {
         this.textAreaFinalOutput = '';
         this.logParserRows.value.itemRows.forEach((element, i) => {
-            if(element.itemParserType == 'pattern'){
-                if(element.itemPatternType != 'custom'){
-                    this.textAreaFinalOutput =  this.textAreaFinalOutput + '%{' + element.itemPatternType + ':' + element.itemName + '}'
+            if (element.itemParserType == 'pattern') {
+                if (element.itemPatternType != 'custom') {
+                    this.textAreaFinalOutput = this.textAreaFinalOutput + '%{' + element.itemPatternType + ':' + element.itemName + '}'
+                } else {
+                    this.textAreaFinalOutput = this.textAreaFinalOutput + '%{' + element.itemCustomPattern + ':' + element.itemName + '}'
                 }
-                else {
-                    this.textAreaFinalOutput =  this.textAreaFinalOutput + '%{' + element.itemCustomPattern + ':' + element.itemName + '}'
-                }
-            }
-            else {
+            } else {
                 this.textAreaFinalOutput = this.textAreaFinalOutput + element.itemStaticText;
             }
 
-                // %{WORD:name} is %{WORD:gender}, %{NUMBER:age} years old and weighs %{NUMBER:weight} kilograms
+            // %{WORD:name} is %{WORD:gender}, %{NUMBER:age} years old and weighs %{NUMBER:weight} kilograms
         })
     }
 
-    moveUp(index: number){
+    moveUp(index: number) {
+        const control = <FormArray>this.logParserRows.controls['itemRows'];
+        if (control.at(index - 1)) {
+            const extras = control.value;
+            const newExtras = this.arraySwap(extras, index - 1, index);
+            control.setValue(newExtras);
+            this.finalOutputHandler();
+        }
 
     }
 
-    moveDown(index: number){
-
+    moveDown(index: number) {
+        const control = <FormArray>this.logParserRows.controls['itemRows'];
+        const extras = control.value;
+        if (index < extras.length - 1) {
+            const newExtras = this.arraySwap(extras, index, index + 1);
+            control.setValue(newExtras);
+            this.finalOutputHandler();
+        }
     }
+
+    arraySwap(arr: any[], index1: number, index2: number): any[] {
+        arr = [...arr];
+        const temp = arr[index1];
+        arr[index1] = arr[index2];
+        arr[index2] = temp;
+        return arr;
+    }
+
 
     dismiss() {
         this.ref.close();
     }
 
-    save(){
-        let logParser: LogParser =new LogParser();
+    save() {
+        let logParser: LogParser = new LogParser();
         logParser.name = this.logParserName;
         logParser.pattern = this.textAreaFinalOutput;
         logParser.id = null;
