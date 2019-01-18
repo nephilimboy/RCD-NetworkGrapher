@@ -1,18 +1,117 @@
 from rest_framework import serializers
 
-from .models import LogParser, CustomPattern, JasonParserAlias, JasonParser
+from .models import LogParser, CustomPattern, JasonParserAlias, JasonParser, LogParserCrudFormCustomPattern, \
+    LogParserCrudFormStaticPattern
+
+
+class LogParserCrudFormCustomPatternSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LogParserCrudFormCustomPattern
+        fields = ("id", "order", "parserType", "name", "patternType", "customPatternName")
+        # allow_null is for to save object inside update method in JasonParserSerializer
+        extra_kwargs = {'id': {'read_only': False, 'allow_null': True}, 'customPatternName': {'read_only': False, 'allow_null': True}}
+
+
+class LogParserCrudFormStaticPatternSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LogParserCrudFormStaticPattern
+        fields = ("id", "order", "parserType", "text")
+        # allow_null is for to save object inside update method in JasonParserSerializer
+        extra_kwargs = {'id': {'read_only': False, 'allow_null': True}, 'text': {'read_only': False, 'allow_null': True}}
 
 
 class LogParserSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
+    logParser_crudForm_customPattern = LogParserCrudFormCustomPatternSerializer(many=True)
+    logParser_crudForm_staticPattern = LogParserCrudFormStaticPatternSerializer(many=True)
 
     class Meta:
         model = LogParser
-        fields = '__all__'
-        # fields = ('id', 'name', 'pattern')
+        # fields = '__all__'
+        fields = ('id', 'name', 'pattern', 'logParser_crudForm_customPattern', 'logParser_crudForm_staticPattern')
 
     def create(self, validated_data):
-        instance = LogParser.objects.create(**validated_data)
+        logParser_crudForm_customPattern_data = validated_data.pop('logParser_crudForm_customPattern')
+        logParser_crudForm_staticPattern_data = validated_data.pop('logParser_crudForm_staticPattern')
+        logParser = LogParser.objects.create(**validated_data)
+        for logParser_customPattern in logParser_crudForm_customPattern_data:
+            customPattern = LogParserCrudFormCustomPattern.objects.get_or_create(logParser=logParser,
+                                                                                 **logParser_customPattern)
+
+        for logParser_staticPattern in logParser_crudForm_staticPattern_data:
+            staticPattern = LogParserCrudFormStaticPattern.objects.get_or_create(logParser=logParser,
+                                                                                 **logParser_staticPattern)
+
+        logParser.save()
+        return logParser
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.pattern = validated_data.get('pattern', instance.pattern)
+
+        # delete custom pattern which is not presented in the input jason
+        for current_customPattern in instance.logParser_crudForm_customPattern.all():
+            isInstanceAvailable = False
+            for logParser_crudForm_customPattern_valid_data in validated_data['logParser_crudForm_customPattern']:
+                if current_customPattern.id == logParser_crudForm_customPattern_valid_data.get('id', None):
+                    isInstanceAvailable = True
+                    break
+            if not isInstanceAvailable:
+                current_customPattern.delete()
+
+        # delete static pattern which is not presented in the input jason
+        for current_staticPattern in instance.logParser_crudForm_staticPattern.all():
+            isInstanceAvailable = False
+            for logParser_crudForm_staticPattern_valid_data in validated_data['logParser_crudForm_staticPattern']:
+                if current_staticPattern.id == logParser_crudForm_staticPattern_valid_data.get('id', None):
+                    isInstanceAvailable = True
+                    break
+            if not isInstanceAvailable:
+                current_staticPattern.delete()
+
+        # Custom pattern
+        for logParser_crudForm_customPattern_valid_data in validated_data['logParser_crudForm_customPattern']:
+            logParser_crudForm_customPattern_valid_data_id = logParser_crudForm_customPattern_valid_data.get('id', None)
+            if logParser_crudForm_customPattern_valid_data_id:
+                logParser_crudForm_customPattern_original = LogParserCrudFormCustomPattern.objects.get(
+                    pk=logParser_crudForm_customPattern_valid_data_id)
+                logParser_crudForm_customPattern_original.order = logParser_crudForm_customPattern_valid_data.get(
+                    'order', None)
+                logParser_crudForm_customPattern_original.parserType = logParser_crudForm_customPattern_valid_data.get(
+                    'parserType', None)
+                logParser_crudForm_customPattern_original.name = logParser_crudForm_customPattern_valid_data.get('name',
+                                                                                                                 None)
+                logParser_crudForm_customPattern_original.patternType = logParser_crudForm_customPattern_valid_data.get(
+                    'patternType', None)
+                logParser_crudForm_customPattern_original.customPatternName = logParser_crudForm_customPattern_valid_data.get(
+                    'customPatternName', None)
+                logParser_crudForm_customPattern_original.save()
+            else:
+                logParser_crudForm_customPattern_new = LogParserCrudFormCustomPattern.objects.create(logParser=instance,
+                                                                                                     **logParser_crudForm_customPattern_valid_data)
+                logParser_crudForm_customPattern_new.save()
+                instance.logParser_crudForm_customPattern.add(logParser_crudForm_customPattern_new)
+
+        # Static pattern
+        for logParser_crudForm_staticPattern_valid_data in validated_data['logParser_crudForm_staticPattern']:
+            logParser_crudForm_staticPattern_valid_data_id = logParser_crudForm_staticPattern_valid_data.get('id', None)
+            if logParser_crudForm_staticPattern_valid_data_id:
+                logParser_crudForm_staticPattern_original = LogParserCrudFormStaticPattern.objects.get(
+                    pk=logParser_crudForm_staticPattern_valid_data_id)
+                logParser_crudForm_staticPattern_original.order = logParser_crudForm_staticPattern_valid_data.get(
+                    'order', None)
+                logParser_crudForm_staticPattern_original.parserType = logParser_crudForm_staticPattern_valid_data.get(
+                    'parserType', None)
+                logParser_crudForm_staticPattern_original.text = logParser_crudForm_staticPattern_valid_data.get('text',
+                                                                                                                 None)
+                logParser_crudForm_staticPattern_original.save()
+            else:
+                logParser_crudForm_staticPattern_new = LogParserCrudFormStaticPattern.objects.create(logParser=instance,
+                                                                                                     **logParser_crudForm_staticPattern_valid_data)
+                logParser_crudForm_staticPattern_new.save()
+                instance.logParser_crudForm_staticPattern.add(logParser_crudForm_staticPattern_new)
+
+        instance.save()
         return instance
 
 

@@ -9,6 +9,28 @@ class LogParser(models.Model):
         return self.name + ' ' + self.pattern
 
 
+class LogParserCrudFormCustomPattern(models.Model):
+    order = models.CharField(max_length=50)
+    parserType = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
+    patternType = models.CharField(max_length=50)
+    customPatternName = models.CharField(max_length=50)
+    logParser = models.ForeignKey(LogParser, on_delete=models.CASCADE, related_name="logParser_crudForm_customPattern")
+
+    def __str__(self):
+        return self.order + ' ' + self.parserType + ' ' + self.name + ' ' + self.patternType + ' ' + self.customPatternName
+
+
+class LogParserCrudFormStaticPattern(models.Model):
+    order = models.CharField(max_length=50)
+    parserType = models.CharField(max_length=50)
+    text = models.TextField()
+    logParser = models.ForeignKey(LogParser, on_delete=models.CASCADE, related_name="logParser_crudForm_staticPattern")
+
+    def __str__(self):
+        return self.order + ' ' + self.parserType + ' ' + self.text
+
+
 class CustomPattern(models.Model):
     name = models.CharField(max_length=50)
     pattern = models.TextField()

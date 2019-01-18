@@ -15,6 +15,10 @@ urlpatterns += format_suffix_patterns([
         LogParserView.as_view(),
         name='logParser_list'),
 
+    url(r'^logParser/(?P<pk>\d+)/$',
+        LogParserView.as_view(),
+        name='logParser_list_update'),
+
     url(r'^customPattern/$',
         CustomPatternView.as_view(),
         name='custom_pattern_list'),

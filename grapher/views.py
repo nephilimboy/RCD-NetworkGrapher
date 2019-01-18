@@ -27,6 +27,14 @@ class LogParserView(APIView):
         return Response(serializer.error_messages,
                         status=status.HTTP_400_BAD_REQUEST)
 
+    def put(self, request, pk):
+        serializer = LogParserSerializer(get_object_or_404(LogParser, pk=pk), data=request.data)
+        if serializer.is_valid(raise_exception=ValueError):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.error_messages,
+                        status=status.HTTP_400_BAD_REQUEST)
+
 
 class CustomPatternView(APIView):
 
