@@ -2,14 +2,16 @@ export class LogParser {
     constructor(public id?: string,
                 public name?: string,
                 public pattern?: string,
-                public logParserCrudFormCustomPattern?: LogParserCrudFormCustomPattern[],
-                public logParserCrudFormStaticPattern?: LogParserCrudFormStaticPattern[],
+                public totalPattern?: number,
+                public logParser_crudForm_customPattern?: LogParserCrudFormCustomPattern[],
+                public logParser_crudForm_staticPattern?: LogParserCrudFormStaticPattern[],
     ) {
         this.id = id ? id : null;
         this.name = name ? name : '';
         this.pattern = pattern ? pattern : '';
-        this.logParserCrudFormCustomPattern = logParserCrudFormCustomPattern ? logParserCrudFormCustomPattern : [];
-        this.logParserCrudFormStaticPattern = logParserCrudFormStaticPattern ? logParserCrudFormStaticPattern : [];
+        this.totalPattern = totalPattern ? totalPattern : 0;
+        this.logParser_crudForm_customPattern = logParser_crudForm_customPattern ? logParser_crudForm_customPattern : [];
+        this.logParser_crudForm_staticPattern = logParser_crudForm_staticPattern ? logParser_crudForm_staticPattern : [];
     }
 }
 

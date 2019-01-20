@@ -9,7 +9,8 @@ class LogParserCrudFormCustomPatternSerializer(serializers.ModelSerializer):
         model = LogParserCrudFormCustomPattern
         fields = ("id", "order", "parserType", "name", "patternType", "customPatternName")
         # allow_null is for to save object inside update method in JasonParserSerializer
-        extra_kwargs = {'id': {'read_only': False, 'allow_null': True}, 'customPatternName': {'read_only': False, 'allow_null': True}}
+        extra_kwargs = {'id': {'read_only': False, 'allow_null': True},
+                        'customPatternName': {'read_only': False, 'allow_null': True}}
 
 
 class LogParserCrudFormStaticPatternSerializer(serializers.ModelSerializer):
@@ -17,18 +18,20 @@ class LogParserCrudFormStaticPatternSerializer(serializers.ModelSerializer):
         model = LogParserCrudFormStaticPattern
         fields = ("id", "order", "parserType", "text")
         # allow_null is for to save object inside update method in JasonParserSerializer
-        extra_kwargs = {'id': {'read_only': False, 'allow_null': True}, 'text': {'read_only': False, 'allow_null': True}}
+        extra_kwargs = {'id': {'read_only': False, 'allow_null': True},
+                        'text': {'read_only': False, 'allow_null': True}}
 
 
 class LogParserSerializer(serializers.ModelSerializer):
-    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    # id = serializers.PrimaryKeyRelatedField(read_only=True)
     logParser_crudForm_customPattern = LogParserCrudFormCustomPatternSerializer(many=True)
     logParser_crudForm_staticPattern = LogParserCrudFormStaticPatternSerializer(many=True)
 
     class Meta:
         model = LogParser
         # fields = '__all__'
-        fields = ('id', 'name', 'pattern', 'logParser_crudForm_customPattern', 'logParser_crudForm_staticPattern')
+        fields = (
+        'id', 'name', 'pattern', 'totalPattern', 'logParser_crudForm_customPattern', 'logParser_crudForm_staticPattern')
 
     def create(self, validated_data):
         logParser_crudForm_customPattern_data = validated_data.pop('logParser_crudForm_customPattern')
@@ -48,6 +51,7 @@ class LogParserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.pattern = validated_data.get('pattern', instance.pattern)
+        instance.totalPattern = validated_data.get('totalPattern', instance.totalPattern)
 
         # delete custom pattern which is not presented in the input jason
         for current_customPattern in instance.logParser_crudForm_customPattern.all():

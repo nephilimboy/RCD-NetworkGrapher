@@ -35,6 +35,10 @@ class LogParserView(APIView):
         return Response(serializer.error_messages,
                         status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, pk, format=None):
+        (get_object_or_404(LogParser, pk=pk)).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class CustomPatternView(APIView):
 

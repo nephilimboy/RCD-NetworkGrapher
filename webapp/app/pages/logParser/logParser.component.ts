@@ -184,13 +184,12 @@ export class LogParserComponent implements OnInit, AfterContentInit {
         );
     }
 
-    createNew() {
-
+    createNewLogParser() {
         this.dialogService
             .open(LogParserEditComponent, {
                 closeOnBackdropClick: false,
                 context: {
-                    customPattern: this.customPattern
+                    logParser: new LogParser()
                 },
             })
             .onClose.subscribe((res) => this.loadAllLogParser());
@@ -218,6 +217,33 @@ export class LogParserComponent implements OnInit, AfterContentInit {
                 },
             })
             .onClose.subscribe((res) => this.loadAllJasonParser());
+    }
+
+    onEditLogParser(evt) {
+        let temp :LogParser = new LogParser();
+        this.logParsers.forEach(parser =>{
+            if (evt.data.id === parser.id) {
+                temp.id = parser.id;
+                temp.name = parser.name;
+                temp.pattern = parser.pattern;
+                temp.totalPattern = parser.totalPattern;
+                parser.logParser_crudForm_customPattern.forEach(customPattern=>{
+                    temp.logParser_crudForm_customPattern.push(customPattern);
+                });
+                parser.logParser_crudForm_staticPattern.forEach(staticPattern=>{
+                    temp.logParser_crudForm_staticPattern.push(staticPattern);
+                });
+            }
+        })
+        this.dialogService
+            .open(LogParserEditComponent, {
+                closeOnBackdropClick: false,
+                context: {
+                    logParser: temp,
+                    isEditData: true
+                },
+            })
+            .onClose.subscribe((res) => this.loadAllLogParser());
     }
 
     onEditDataLogParser(evt) {
@@ -257,6 +283,12 @@ export class LogParserComponent implements OnInit, AfterContentInit {
             })
             .onClose.subscribe((res) => this.loadAllJasonParser());
 
+    }
+
+    onDeleteLogParser(evt) {
+        this.lopParserService.delete(parseInt(evt.data.id)).subscribe((response) => {
+            this.loadAllLogParser();
+        }, (res) => console.log('res'));
     }
 
     onDeleteCustomPattern(evt) {

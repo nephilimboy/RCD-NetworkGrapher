@@ -9,14 +9,14 @@
                             <h4 style="margin-top: 3%">Log Parsers</h4>
                         </div>
                         <div class="col-1 offset-8">
-                            <a class="btn btn-success btn-demo " (click)="createNew()"><i
+                            <a class="btn btn-success btn-demo " (click)="createNewLogParser()"><i
                                     class="ion-plus-round"></i></a>
                         </div>
                     </div>
                 </nb-card-header>
 
                 <nb-card-body>
-                    <ng2-smart-table [settings]="logParser_table_settings" [source]="sourceLogParser" (delete)="onDeleteConfirmLogParser($event)" (edit)="onEditDataLogParser($event)">
+                    <ng2-smart-table [settings]="logParser_table_settings" [source]="sourceLogParser" (delete)="onDeleteLogParser($event)" (edit)="onEditLogParser($event)">
                     </ng2-smart-table>
                 </nb-card-body>
             </div>

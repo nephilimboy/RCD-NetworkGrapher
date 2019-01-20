@@ -27,7 +27,7 @@ export class LogParserService {
     }
 
     update(logParser: LogParser): Observable<EntityResponseType> {
-        return this.http.put<LogParser>(this.resourceUrl, logParser, { observe: 'response' });
+        return this.http.put<LogParser>(this.resourceUrl + logParser.id + '/', logParser, {observe: 'response'});
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
