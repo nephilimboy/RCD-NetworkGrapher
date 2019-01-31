@@ -31,7 +31,8 @@ class LogParserSerializer(serializers.ModelSerializer):
         model = LogParser
         # fields = '__all__'
         fields = (
-        'id', 'name', 'pattern', 'totalPattern', 'logParser_crudForm_customPattern', 'logParser_crudForm_staticPattern')
+            'id', 'name', 'pattern', 'totalPattern', 'logParser_crudForm_customPattern',
+            'logParser_crudForm_staticPattern')
 
     def create(self, validated_data):
         logParser_crudForm_customPattern_data = validated_data.pop('logParser_crudForm_customPattern')

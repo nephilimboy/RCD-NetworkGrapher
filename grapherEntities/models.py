@@ -1,10 +1,11 @@
 from django.db import models
 
+from grapher.models import LogParser
 
-# Create your models here.
 
 class GrapherEntity(models.Model):
     name = models.CharField(max_length=50)
+    logParser_list = models.ManyToManyField(LogParser, related_name="logParsers_list", blank=True)
 
     def __str__(self):
         return self.name
