@@ -7,9 +7,7 @@ class LogParser(models.Model):
     name = models.CharField(max_length=50)
     pattern = models.TextField()
     totalPattern = models.IntegerField(null=True)
-
-    grapherEntity = models.ManyToManyField(GrapherEntity)
-    # grapherEntity = models.ForeignKey(GrapherEntity, on_delete=models.CASCADE, related_name="logParser", default='')
+    grapherEntity = models.ManyToManyField(GrapherEntity, related_name="logParsers_list", blank=True)
 
     def __str__(self):
         return self.name + ' ' + self.pattern
