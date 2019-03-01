@@ -6,6 +6,7 @@ import {PagesRoutingModule} from './pages-routing.module';
 import {ThemeModule} from '../theme/theme.module';
 import {NetworkGrapherModule} from "./networkGrapher/networkGrapher.module";
 import {LogParserModule} from "./logParser/logParser.module";
+import {GrapherEntitiesModule} from "./grapherEntities/grapherEntities.module";
 
 const PAGES_COMPONENTS = [
   PagesComponent,
@@ -18,6 +19,7 @@ const PAGES_COMPONENTS = [
     DashboardModule,
     NetworkGrapherModule,
     LogParserModule,
+    GrapherEntitiesModule,
   ],
   declarations: [
     ...PAGES_COMPONENTS,

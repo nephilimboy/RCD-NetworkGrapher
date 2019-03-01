@@ -17,6 +17,10 @@ const routes: Routes = [{
             loadChildren: './networkGrapher/networkGrapher.module#NetworkGrapherModule',
         },
         {
+            path: 'grapherEntities',
+            loadChildren: './grapherEntities/grapherEntities.module#GrapherEntitiesModule',
+        },
+        {
             path: 'logParser',
             loadChildren: './logParser/logParser.module#LogParserModule',
         },

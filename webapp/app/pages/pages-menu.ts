@@ -16,6 +16,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
                 link: '/pages/networkGrapher',
             },
             {
+                title: 'Grapher Entities',
+                link: '/pages/grapherEntities',
+            },
+            {
                 title: 'Log Parser',
                 link: '/pages/logParser',
             },
