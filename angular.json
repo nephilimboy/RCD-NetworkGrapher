@@ -49,7 +49,12 @@
               "node_modules/tinymce/plugins/table/plugin.min.js",
               "node_modules/echarts/dist/echarts.min.js",
               "node_modules/echarts/dist/extension/bmap.min.js",
-              "node_modules/chart.js/dist/Chart.min.js"
+              "node_modules/chart.js/dist/Chart.min.js",
+              "node_modules/jquery/dist/jquery.min.js",
+              "webapp/assets/js/jquery-ui.min.js",
+              "webapp/assets/js/jquery.panzoom.min.js",
+              "webapp/assets/js/jquery.mousewheel.min.js",
+              "webapp/assets/js/jquery.flowchart.min.js"
             ]
           },
           "configurations": {

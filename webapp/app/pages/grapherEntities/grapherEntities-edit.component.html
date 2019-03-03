@@ -8,15 +8,21 @@
                 <div class="row">
                     <label for="inputName" class="col-1 col-form-label">Name</label>
                     <div class="col-5">
-
                     </div>
-
                 </div>
-                <br/>
-
-
-                <br/>
                 <hr/>
+                <div id="chart_container" #chart_container>
+                    <div class="flowchart-example-container" id="exampleDiv" #exampleDiv></div>
+                </div>
+
+                <input type="button" value="add operator" (click)="addNewOperator()">
+                <input type="button" value="add operator2" (click)="addNewOperator2()">
+                <input type="button" value="delete" (click)="deleteOperationOrLink()">
+                <input type="button" value="load" (click)="load()">
+                <input type="button" value="get" (click)="get()">
+                <br/>
+                <textarea nbInput fullWidth shape="round" name="diagModel" [(ngModel)]="diagModel" placeholder="model"
+                          style="height: 300px; width: 500px"></textarea>
                 <br/>
 
             </nb-card-body>
